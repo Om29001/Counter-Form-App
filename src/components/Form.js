@@ -1,15 +1,22 @@
 import React from "react"
 import Btn from "./Atoms/Btn"
+import SearchBar from "./Atoms/SearchBar"
+import Table from "./Atoms/Table"
 
 class Form extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { dict: [], name: "", email: "", num: 0, city: "" }
+    this.state = { dict: [], name: "", email: "", num: 0, city: "mumbai", search: "" }
   }
 
   handleSubmit() {
     this.setState((prev) => ({ dict: [...prev.dict, { name: this.state.name, email: this.state.email, city: this.state.city, num: this.state.num }] }))
-    console.log(this.state)
+  }
+
+  setSeach(data) {
+    this.setState(() => ({
+      search: data,
+    }))
   }
 
   render() {
@@ -47,25 +54,14 @@ class Form extends React.Component {
         </div>
         <Btn fun={() => this.handleSubmit()} title="Submit" st={{ fontSize: "20px", border: "1px solid gray", padding: "10px", marginLeft: "10px", color: "white", backgroundColor: "DodgerBlue" }} />
         <hr />
+
         {this.state.dict.length > 0 ? (
-          <table>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Number</th>
-              <th>City</th>
-            </tr>
-            {this.state.dict.map((data) => (
-              <tr>
-                <td>{data.name}</td>
-                <td>{data.email}</td>
-                <td>{data.num}</td>
-                <td>{data.city}</td>
-              </tr>
-            ))}
-          </table>
+          <>
+            <SearchBar search={this.state.search} fun={(e) => this.setSeach(e)} />
+            <Table dict={this.state.dict.filter((a) => (this.state.search ? a.name.toLowerCase().includes(this.state.search.toLowerCase()) : a)).sort((a, b) => a.name.localeCompare(b.name))} />
+          </>
         ) : (
-          <h1>NO DATA</h1>
+          <h3>NO DATA</h3>
         )}
       </center>
     )

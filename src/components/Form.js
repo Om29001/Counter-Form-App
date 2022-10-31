@@ -7,6 +7,11 @@ class Form extends React.Component {
     this.state = { dict: [], name: "", email: "", num: 0, city: "" }
   }
 
+  handleSubmit() {
+    this.setState((prev) => ({ dict: [...prev.dict, { name: this.state.name, email: this.state.email, city: this.state.city, num: this.state.num }] }))
+    console.log(this.state)
+  }
+
   render() {
     return (
       <center>
@@ -40,8 +45,28 @@ class Form extends React.Component {
             </label>
           </form>
         </div>
-        <Btn fun={() => this.inc()} title="Submit" st={{ fontSize: "20px", border: "1px solid gray", padding: "10px", marginLeft: "10px", color: "white", backgroundColor: "DodgerBlue" }} />
+        <Btn fun={() => this.handleSubmit()} title="Submit" st={{ fontSize: "20px", border: "1px solid gray", padding: "10px", marginLeft: "10px", color: "white", backgroundColor: "DodgerBlue" }} />
         <hr />
+        {this.state.dict.length > 0 ? (
+          <table>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Number</th>
+              <th>City</th>
+            </tr>
+            {this.state.dict.map((data) => (
+              <tr>
+                <td>{data.name}</td>
+                <td>{data.email}</td>
+                <td>{data.num}</td>
+                <td>{data.city}</td>
+              </tr>
+            ))}
+          </table>
+        ) : (
+          <h1>NO DATA</h1>
+        )}
       </center>
     )
   }
